@@ -704,7 +704,7 @@ font-family: &quot;Segoe UI&quot;;</string>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="Preferences_Button">
+       <widget class="QPushButton" name="Customfile_Button">
         <property name="minimumSize">
          <size>
           <width>75</width>
@@ -718,7 +718,7 @@ font-family: &quot;Segoe UI&quot;;</string>
          </size>
         </property>
         <property name="text">
-         <string>Preferences</string>
+         <string>Custom file</string>
         </property>
        </widget>
       </item>

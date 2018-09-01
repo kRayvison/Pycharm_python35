@@ -40,7 +40,8 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         self.Close_Button.clicked.connect(self.kclose)
         self.Input_Button.clicked.connect(self.OpenInput)
         self.Output_Button.clicked.connect(self.OpenOutput)
-
+        self.Customfile_Button.clicked.connect(self.OpenCustom_files)
+        self.PreRender_Button.clicked.connect(self.OpenPrerender)
         #self.k_inputPath = sysPath['tiles_path']
 
 
@@ -98,6 +99,16 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         self.k_outputPath = sysPath['output_user_path'].replace('/','\\')
         #print(self.k_outputPath)
 
+        #B盘 插件路径
+        self.k_pluginPath = sysPath['plugin_path']
+
+        #脚本 function文件夹路径
+        self.function_path = cfg.function_path
+
+
+        #定制脚本  function script 文件夹路径
+        self.C_function_path = os.path.normpath(cfg.C_function_path)
+        self.C_script_path   = os.path.normpath(cfg.C_script_path)
 
     def OpenInput(self):
         """ Input按钮功能 """
@@ -115,9 +126,25 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
             #不存在路径时 弹出窗口
             self.msg('%s path is not exists' %self.k_outputPath)
 
+
+
     #Preferences按钮功能
-    #def OpenPreferences按钮功能(self):
-        #os.startfile(self.k_outputPath)
+    def OpenCustom_files(self):
+        B_custom_files = os.path.join(self.k_pluginPath,'config_files',self.UserID_lineEdit.text())
+        print (B_custom_files)
+
+
+        if os.path.exists(B_custom_files):
+            os.startfile(B_custom_files)
+        else:
+            self.msg('%s path is not exists' %B_custom_files)
+
+    def OpenPrerender(self):
+        Prerender_path = os.path.join(self.C_script_path)
+        if os.path.exists(Prerender_path):
+            os.startfile(Prerender_path)
+        else:
+            self.msg('%s path is not exists' %Prerender_path)
 
     def knetuse(self):
         """根据 mapping的内容 映射盘符"""
@@ -131,7 +158,11 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         #self.close()
         #self.hide()
         #app.exit()
-        #self.getData()
+        self.getData()
+
+
+        #print (self.function_path,self.script_path,self.C_function_path,self.C_script_path)
+
 
 
 
@@ -139,16 +170,43 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         """获取窗口内 Plugins Mapping maya版本 的数据"""
 
         #获取Plugins的数据
-        getPluginsQtab = self.getItemfromQTableWidget(self.Plugins_tableWidget)
-        print (getPluginsQtab)
+        self.getPluginsQtab = self.getItemfromQTableWidget(self.Plugins_tableWidget)
+        print (self.getPluginsQtab)
 
         # 获取Mapping的数据
         self.getMappingQtab = self.getItemfromQTableWidget(self.Mapping_tableWidget)
         print (self.getMappingQtab)
 
         # 获取maya版本数据
-        getMayaVer = self.Version_lineEdit.text()
-        print (getMayaVer)
+        self.getMayaVer = self.Version_lineEdit.text()
+        print (self.getMayaVer)
+
+    def excuteMaya(self):
+
+        #获取窗口内的信息
+        self.getData()
+
+        plugin_cfg_file = {u'cg_name':'Maya','cg_version':self.getMayaVer,'plugins':self.getPluginsQtab}
+
+        custom_file = os.path.join(self.C_function_path,'CustomConfig.py')
+
+        #C_MayaPluginPY = os.path.join(self.C_function_path, 'MayaPlugin.py')
+        #MayaPluginPY   = os.path.join(self.function_path, 'MayaPlugin.py')
+        if os.path.exists(C_function_path):
+            sys.path.append(self.C_function_path)
+            __import__('MayaPlugin')
+        elif os.path.exists(function_path):
+            sys.path.append(self.function_path)
+            __import__('MayaPlugin')
+
+        maya_plugin = MayaPlugin.MayaPlugin(plugin_cfg_file,[custom_file])
+        maya_plugin.config()
+
+        cmd_str = r"C:\Program Files\Autodesk\Maya%s\bin\maya.exe" % (cg_version)
+
+        os.system('"' + cmd_str + '"')
+
+
 
 
     def getItemfromQTableWidget(self,QTablename):

@@ -8,9 +8,13 @@ class analysisCfg():
 
         platform_address = {'W2rb':r'\\10.60.100.101','W9rb':r'\\10.80.100.101','GPUrb':r'\\10.90.100.101'}
 
-        #cfg_jsonPath = r'D:\Work\cfg\cfg\task.json'
-        #sys_jsonPath = r'D:\Work\cfg\sys_cfg\system.json'
+        cfg_jsonPath = r'D:\Work\cfg\cfg\task.json'
+        sys_jsonPath = r'D:\Work\cfg\sys_cfg\system.json'
 
+        self.k_cfg_json = json.loads(open(cfg_jsonPath).read())
+        self.k_sys_json = json.loads(open(sys_jsonPath).read())
+
+        '''
         userID_up =''
 
         if int(userID[-3:]) >= 500:
@@ -30,8 +34,13 @@ class analysisCfg():
             self.k_sys_json = json.loads(open(sys_jsonPath).read())
 
         else:self.k_jsonerror = True
+        '''
 
+        self.function_path = os.path.join(platform_address[platform],'render_p','script','CG','Maya','function')
+        self.script_path   = os.path.join(platform_address[platform],'render_p','script','CG','Maya','script')
 
+        self.C_function_path = os.path.join(platform_address[platform], 'render_p', 'script', 'User', userID,'CG','Maya','function')
+        self.C_script_path   = os.path.join(platform_address[platform], 'render_p', 'script', 'User', userID, 'CG', 'Maya', 'function')
 
     def analysisPlugins(self):
         k_plugins = {}

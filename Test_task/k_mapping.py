@@ -2,8 +2,12 @@
 import time
 import os
 import sys
+import subprocess
+
 class k_mapping():
     def __init__(self,mount):
+        self.is_win   = True
+        self.is_linux = False
         print ('go mapping')
         self.clean_network()
         self.mapping_network(mount)
@@ -22,7 +26,7 @@ class k_mapping():
         sys.stdout.flush()
 
 
-
+    '''
     def mapping_network(self,mount):
         for i in mount:
 
@@ -38,21 +42,50 @@ class k_mapping():
                             print ("Mapping %s to %s" % (i, path))
                             break
 
-                elif path.lower().startswith("c:"):
-                    path = r"\\127.0.0.1\c$" + path.split(":")[1]
-                    if os.system("net use %s %s" % (i, path)):
-                        print ("can not mapping %s to %s" % (i, path))
-                    else:
-                        print ("Mapping %s to %s" % (i, path))
-                else:
-                    self.create_virtua_drive(i, path)
             else:
                 print ('[warn]The path is not exist:%s' % path)
 
             sys.stdout.flush()
+    '''
 
-        #os.system("net use")
-        #os.system("subst")
+    def run_command(self, command):
 
+        if self.is_win:
+            return subprocess.call(command)
+        if self.is_linux:
+            return subprocess.call(command, shell=1)
 
+    def mapping_network(self,mount):
+        for i in mount:
+            path = mount[i].replace("/", "\\")
+            if path.startswith("\\"):
+                if self.run_command("net use %s %s" % (i, path)):
+                    print ("can not mapping %s to %s" % (i, path))
+                else:
+                    print ("Mapping %s to %s" % (i, path))
+            else:
+                self.create_virtua_drive(i, path)
 
+                sys.stdout.flush()
+
+        self.run_command("net use")
+        self.run_command("subst")
+
+    def create_virtua_drive(self, virtual_drive, path, max=60):
+        if max == 0:
+            print("can not create virutal drive: %s => %s" % (virtual_drive,path))
+            sys.stdout.flush()
+            return 0
+        else:
+            self.run_command("subst %s %s" % (virtual_drive, path))
+            sys.stdout.flush()
+            if os.path.exists(virtual_drive + "/"):
+                print("create virutal drive: %s => %s" % (virtual_drive,path))
+                print(virtual_drive + "/" + " is exists")
+                sys.stdout.flush()
+            else:
+                time.sleep(1)
+                print
+                "wait 1 second and try subst again"
+                sys.stdout.flush()
+                self.create_virtua_drive(virtual_drive, path, max - 1)

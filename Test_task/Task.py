@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Task.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.2
+# Created by: PyQt5 UI code generator 5.8.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -278,11 +278,11 @@ class Ui_MainWindow(object):
         self.Output_Button.setMaximumSize(QtCore.QSize(120, 16777215))
         self.Output_Button.setObjectName("Output_Button")
         self.path_horizontalLayout.addWidget(self.Output_Button)
-        self.Preferences_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.Preferences_Button.setMinimumSize(QtCore.QSize(75, 22))
-        self.Preferences_Button.setMaximumSize(QtCore.QSize(120, 16777215))
-        self.Preferences_Button.setObjectName("Preferences_Button")
-        self.path_horizontalLayout.addWidget(self.Preferences_Button)
+        self.Customfile_Button = QtWidgets.QPushButton(self.centralwidget)
+        self.Customfile_Button.setMinimumSize(QtCore.QSize(75, 22))
+        self.Customfile_Button.setMaximumSize(QtCore.QSize(120, 16777215))
+        self.Customfile_Button.setObjectName("Customfile_Button")
+        self.path_horizontalLayout.addWidget(self.Customfile_Button)
         self.PreRender_Button = QtWidgets.QPushButton(self.centralwidget)
         self.PreRender_Button.setMinimumSize(QtCore.QSize(75, 22))
         self.PreRender_Button.setMaximumSize(QtCore.QSize(120, 16777215))
@@ -351,7 +351,7 @@ class Ui_MainWindow(object):
         self.Mapping_netuse.setText(_translate("MainWindow", "net use"))
         self.Input_Button.setText(_translate("MainWindow", "Input"))
         self.Output_Button.setText(_translate("MainWindow", "Output"))
-        self.Preferences_Button.setText(_translate("MainWindow", "Preferences"))
+        self.Customfile_Button.setText(_translate("MainWindow", "Custom file"))
         self.PreRender_Button.setText(_translate("MainWindow", "PreRender"))
         self.Maya_Button.setText(_translate("MainWindow", "Maya"))
         self.CMD_Button.setText(_translate("MainWindow", "CMD"))
