@@ -42,14 +42,17 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         self.Output_Button.clicked.connect(self.OpenOutput)
         self.Customfile_Button.clicked.connect(self.OpenCustom_files)
         self.PreRender_Button.clicked.connect(self.OpenPrerender)
+
+        self.Maya_Button.clicked.connect(self.excuteMaya)
+        self.CMD_Button.clicked.connect(self.excuteCMD)
         #self.k_inputPath = sysPath['tiles_path']
 
-
+        print ('ahah')
 
         #maya首选项目录
 
         #获取窗口的信息
-        self.getData()
+        #self.getData()
 
     def kGetcfg(self):
 
@@ -181,8 +184,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         self.getMayaVer = self.Version_lineEdit.text()
         print (self.getMayaVer)
 
-    def excuteMaya(self):
-
+    def excuteBefore(self):
         #获取窗口内的信息
         self.getData()
 
@@ -192,21 +194,34 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
         #C_MayaPluginPY = os.path.join(self.C_function_path, 'MayaPlugin.py')
         #MayaPluginPY   = os.path.join(self.function_path, 'MayaPlugin.py')
-        if os.path.exists(C_function_path):
+        if os.path.exists(self.C_function_path):
             sys.path.append(self.C_function_path)
-            __import__('MayaPlugin')
-        elif os.path.exists(function_path):
+            #__import__('MayaPlugin')
+            import MayaPlugin
+        elif os.path.exists(self.function_path):
+            print (self.function_path)
             sys.path.append(self.function_path)
-            __import__('MayaPlugin')
+            #__import__('MayaPlugin')
+            import MayaPlugin
 
         maya_plugin = MayaPlugin.MayaPlugin(plugin_cfg_file,[custom_file])
         maya_plugin.config()
 
-        cmd_str = r"C:\Program Files\Autodesk\Maya%s\bin\maya.exe" % (cg_version)
+    def excuteMaya(self):
+        self.excuteBefore()
 
-        os.system('"' + cmd_str + '"')
+        cmd_str = r"C:\Program Files\Autodesk\Maya%s\bin\maya.exe" % (self.getMayaVer)
+        #cmd_str = r"D:\Autodesk\Maya2017\bin\maya.exe"
+        os.startfile('"' + cmd_str + '"')
+        print ('startfile %s' %cmd_str)
 
+    def excuteCMD(self):
+        self.excuteBefore()
+        cmd_strmaya = r"C:\Program Files\Autodesk\Maya%s\bin\maya.exe" % (self.getMayaVer)
 
+        cmd_str='cmd'
+        os.startfile('"' + cmd_str + '"')
+        print('"%s"' %cmd_strmaya)
 
 
     def getItemfromQTableWidget(self,QTablename):
