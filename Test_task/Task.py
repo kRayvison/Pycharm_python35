@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(567, 692)
+        MainWindow.resize(567, 742)
         MainWindow.setStatusTip("")
         MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet("/* === Shared === */\n"
@@ -291,6 +291,18 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.path_horizontalLayout)
         spacerItem13 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem13)
+        self.TextCMD_horizontalLayout = QtWidgets.QHBoxLayout()
+        self.TextCMD_horizontalLayout.setObjectName("TextCMD_horizontalLayout")
+        spacerItem14 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.TextCMD_horizontalLayout.addItem(spacerItem14)
+        self.TextCMD = QtWidgets.QTextEdit(self.centralwidget)
+        self.TextCMD.setEnabled(True)
+        self.TextCMD.setToolTipDuration(-1)
+        self.TextCMD.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.TextCMD.setLineWidth(1)
+        self.TextCMD.setObjectName("TextCMD")
+        self.TextCMD_horizontalLayout.addWidget(self.TextCMD)
+        self.verticalLayout.addLayout(self.TextCMD_horizontalLayout)
         self.execute_horizontalLayout = QtWidgets.QHBoxLayout()
         self.execute_horizontalLayout.setContentsMargins(-1, 5, -1, -1)
         self.execute_horizontalLayout.setObjectName("execute_horizontalLayout")

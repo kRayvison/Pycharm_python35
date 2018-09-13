@@ -11,6 +11,7 @@ import Task
 import analysis_cfg
 #import QDesktopServices
 import k_mapping
+from CommonUtil import RBCommon as CLASS_COMMON_UTIL
 
 class k_Taskwindow(Task.Ui_MainWindow,QWidget):
     def __init__(self,parent=None):
@@ -23,7 +24,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
         self.Plugins_tableWidget.setColumnWidth(1,130)
 
-
+        self.TextCMD.hide()
 
 
 
@@ -47,7 +48,6 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         self.CMD_Button.clicked.connect(self.excuteCMD)
         #self.k_inputPath = sysPath['tiles_path']
 
-        print ('ahah')
 
         #maya首选项目录
 
@@ -103,7 +103,10 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         #print(self.k_outputPath)
 
         #B盘 插件路径
-        self.k_pluginPath = sysPath['plugin_path']
+        if 'plugin_path' in sysPath:
+            self.k_pluginPath = sysPath['plugin_path']
+        elif 'plugin_path_list' in sysPath:
+            self.k_pluginPath = sysPath['plugin_path_list'][0]
 
         #脚本 function文件夹路径
         self.function_path = cfg.function_path
@@ -216,13 +219,15 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         print ('startfile %s' %cmd_str)
 
     def excuteCMD(self):
-        self.excuteBefore()
-        cmd_strmaya = r"C:\Program Files\Autodesk\Maya%s\bin\maya.exe" % (self.getMayaVer)
+        self.TextCMD.show()
 
-        cmd_str='cmd'
-        os.startfile('"' + cmd_str + '"')
-        print('"%s"' %cmd_strmaya)
+        CMDText = self.TextCMD.toPlainText()
+        if CMDText:
+            print ('excute %s' %CMDText)
+            self.excuteBefore()
 
+            CLASS_COMMON_UTIL.cmd(CMDText,continue_on_error=True, my_shell=True)
+            #os.system(CMDText)
 
     def getItemfromQTableWidget(self,QTablename):
         """获取QTab内每个格子的数据，并组成字典，QTablename输入的数据为QTab的名字"""

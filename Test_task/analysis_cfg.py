@@ -58,7 +58,13 @@ class analysisCfg():
         k_mapping = {}
         k_mapping = (self.k_cfg_json['mnt_map'] if self.k_cfg_json['mnt_map'] else '')
         #B盘路径
-        k_pluginPath = {'B:':self.k_sys_json['system_info']['common']['plugin_path']}
+
+        if 'plugin_path' in self.k_sys_json['system_info']['common']:
+            k_Bpath = self.k_sys_json['system_info']['common']['plugin_path']
+        elif 'plugin_path_list' in self.k_sys_json['system_info']['common']:
+            k_Bpath = self.k_sys_json['system_info']['common']['plugin_path_list'][0]
+
+        k_pluginPath = {'B:':k_Bpath}
         k_mapping.update(k_pluginPath)
         return k_mapping
 
