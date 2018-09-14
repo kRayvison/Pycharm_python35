@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+import re
 class analysisCfg():
     def __init__(self,platform,taskID,userID):
+
+        delfix = re.findall('^\d?\D', taskID)
+        if delfix:
+            taskID = taskID.replace(delfix[0], '')
+
 
         self.k_jsonerror = False
 
@@ -26,7 +32,7 @@ class analysisCfg():
         sys_jsonPath = os.path.join(platform_address[platform],'render_p','config',userID_up,userID,taskID,'sys_cfg','system.json')
         cfg_jsonPath = os.path.normpath(cfg_jsonPath)
         sys_jsonPath = os.path.normpath(sys_jsonPath)
-        print (cfg_jsonPath,sys_jsonPath)
+        print (cfg_jsonPath)
 
         if os.path.exists(cfg_jsonPath) and os.path.exists(sys_jsonPath):
 

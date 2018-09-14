@@ -67,54 +67,53 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
         if not k_platform or not k_taskID or not k_useID:
             self.msg('No specified Platform or ID')
-            sys.exit(1)
+
+        else:
+            # 实例 配置json脚本
+            cfg = analysis_cfg.analysisCfg(k_platform,k_taskID,k_useID)
+
+            if cfg.k_jsonerror:
+                self.msg('cannot find cfg.json')
+
+            else:
+                #填入plugins数据
+                Plugins = cfg.analysisPlugins()
+                #print (Plugins)
+                self.setItemToQTableWidget(self.Plugins_tableWidget,Plugins)
 
 
-        # 实例 配置json脚本
-        cfg = analysis_cfg.analysisCfg(k_platform,k_taskID,k_useID)
+                #填入Mapping数据
+                Mapping = cfg.analysisMapping()
+                #print (Mapping)
+                self.setItemToQTableWidget(self.Mapping_tableWidget, Mapping)
+                #填入maya版本号
+                mayaver = cfg.analysisSoft()
+                self.Version_lineEdit.setText(mayaver)
 
-        if cfg.k_jsonerror:
-            self.msg('cannot find cfg.json')
-            sys.exit(1)
+                sysPath = cfg.analysisPath()
 
-        #填入plugins数据
-        Plugins = cfg.analysisPlugins()
-        #print (Plugins)
-        self.setItemToQTableWidget(self.Plugins_tableWidget,Plugins)
+                #maya文件目录
+                self.k_inputPath = sysPath['input_cg_file']
+                self.k_inputPath = os.path.dirname(self.k_inputPath).replace('/','\\')
+                #print(self.k_inputPath)
 
+                #maya输出图片目录
+                self.k_outputPath = sysPath['output_user_path'].replace('/','\\')
+                #print(self.k_outputPath)
 
-        #填入Mapping数据
-        Mapping = cfg.analysisMapping()
-        #print (Mapping)
-        self.setItemToQTableWidget(self.Mapping_tableWidget, Mapping)
-        #填入maya版本号
-        mayaver = cfg.analysisSoft()
-        self.Version_lineEdit.setText(mayaver)
+                #B盘 插件路径
+                if 'plugin_path' in sysPath:
+                    self.k_pluginPath = sysPath['plugin_path']
+                elif 'plugin_path_list' in sysPath:
+                    self.k_pluginPath = sysPath['plugin_path_list'][0]
 
-        sysPath = cfg.analysisPath()
-
-        #maya文件目录
-        self.k_inputPath = sysPath['input_cg_file']
-        self.k_inputPath = os.path.dirname(self.k_inputPath).replace('/','\\')
-        #print(self.k_inputPath)
-
-        #maya输出图片目录
-        self.k_outputPath = sysPath['output_user_path'].replace('/','\\')
-        #print(self.k_outputPath)
-
-        #B盘 插件路径
-        if 'plugin_path' in sysPath:
-            self.k_pluginPath = sysPath['plugin_path']
-        elif 'plugin_path_list' in sysPath:
-            self.k_pluginPath = sysPath['plugin_path_list'][0]
-
-        #脚本 function文件夹路径
-        self.function_path = cfg.function_path
+                #脚本 function文件夹路径
+                self.function_path = cfg.function_path
 
 
-        #定制脚本  function script 文件夹路径
-        self.C_function_path = os.path.normpath(cfg.C_function_path)
-        self.C_script_path   = os.path.normpath(cfg.C_script_path)
+                #定制脚本  function script 文件夹路径
+                self.C_function_path = os.path.normpath(cfg.C_function_path)
+                self.C_script_path   = os.path.normpath(cfg.C_script_path)
 
     def OpenInput(self):
         """ Input按钮功能 """
@@ -164,11 +163,10 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         #self.close()
         #self.hide()
         #app.exit()
-        self.getData()
-
+        #self.getData()
+        #app.exec_()
 
         #print (self.function_path,self.script_path,self.C_function_path,self.C_script_path)
-
 
 
 
