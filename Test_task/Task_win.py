@@ -8,7 +8,8 @@ import sys
 import os
 import time
 import Task
-import analysis_cfg
+import analysis_cfg_fox
+import analysis_cfg_china
 #import QDesktopServices
 import k_mapping
 from CommonUtil import RBCommon as CLASS_COMMON_UTIL
@@ -25,7 +26,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         self.Plugins_tableWidget.setColumnWidth(1,130)
 
         self.TextCMD.hide()
-
+        self.RBgroupBox_layoutWidget2.hide()
 
 
         #按钮功能设置
@@ -48,19 +49,37 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         self.CMD_Button.clicked.connect(self.excuteCMD)
         #self.k_inputPath = sysPath['tiles_path']
 
+        self.PlatformMode_CB.currentIndexChanged.connect(self.kchangeModel)
+
 
         #maya首选项目录
 
         #获取窗口的信息
         #self.getData()
 
-    def kGetcfg(self):
+    def kchangeModel(self):
+        "转换平台模式"
 
-        k_platform_group= [self.W2rb,self.W9rb,self.GPUrb]
+        if self.PlatformMode_CB.currentText() in ['Fox']:
+            self.RBgroupBox_layoutWidget2.hide()
+            self.RBgroupBox_layoutWidget.show()
+        elif self.PlatformMode_CB.currentText() in ['China']:
+            self.RBgroupBox_layoutWidget2.show()
+            self.RBgroupBox_layoutWidget.hide()
+
+    def kGetcfg(self):
         k_platform = ''
-        for i in k_platform_group:
-            if i.isChecked():
-                k_platform = i.objectName()
+
+        if self.PlatformMode_CB.currentText() in ['Fox']:
+            k_platform_group= [self.W2rb,self.W9rb,self.GPUrb]
+            for i in k_platform_group:
+                if i.isChecked():
+                    k_platform = i.objectName()
+        elif self.PlatformMode_CB.currentText() in ['China']:
+            k_platform_group = [self.c_W2rb, self.c_W3rb, self.c_W4rb, self.c_W9rb, self.c_GPUrb]
+            for i in k_platform_group:
+                if i.isChecked():
+                    k_platform = i.objectName()
 
         k_taskID = self.TaskID_lineEdit.text()
         k_useID  = self.UserID_lineEdit.text()
@@ -69,51 +88,71 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
             self.msg('No specified Platform or ID')
 
         else:
-            # 实例 配置json脚本
-            cfg = analysis_cfg.analysisCfg(k_platform,k_taskID,k_useID)
+            if self.PlatformMode_CB.currentText() in ['Fox']:
+                # 实例 配置json脚本
+                cfg = analysis_cfg_fox.analysisCfg(k_platform,k_taskID,k_useID)
 
-            if cfg.k_jsonerror:
-                self.msg('cannot find cfg.json')
+                if cfg.k_jsonerror:
+                    self.msg('cannot find cfg.json')
 
-            else:
-                #填入plugins数据
-                Plugins = cfg.analysisPlugins()
-                #print (Plugins)
-                self.setItemToQTableWidget(self.Plugins_tableWidget,Plugins)
-
-
-                #填入Mapping数据
-                Mapping = cfg.analysisMapping()
-                #print (Mapping)
-                self.setItemToQTableWidget(self.Mapping_tableWidget, Mapping)
-                #填入maya版本号
-                mayaver = cfg.analysisSoft()
-                self.Version_lineEdit.setText(mayaver)
-
-                sysPath = cfg.analysisPath()
-
-                #maya文件目录
-                self.k_inputPath = sysPath['input_cg_file']
-                self.k_inputPath = os.path.dirname(self.k_inputPath).replace('/','\\')
-                #print(self.k_inputPath)
-
-                #maya输出图片目录
-                self.k_outputPath = sysPath['output_user_path'].replace('/','\\')
-                #print(self.k_outputPath)
-
-                #B盘 插件路径
-                if 'plugin_path' in sysPath:
-                    self.k_pluginPath = sysPath['plugin_path']
-                elif 'plugin_path_list' in sysPath:
-                    self.k_pluginPath = sysPath['plugin_path_list'][0]
-
-                #脚本 function文件夹路径
-                self.function_path = cfg.function_path
+                else:
+                    #填入plugins数据
+                    Plugins = cfg.analysisPlugins()
+                    #print (Plugins)
+                    self.setItemToQTableWidget(self.Plugins_tableWidget,Plugins)
 
 
-                #定制脚本  function script 文件夹路径
-                self.C_function_path = os.path.normpath(cfg.C_function_path)
-                self.C_script_path   = os.path.normpath(cfg.C_script_path)
+                    #填入Mapping数据
+                    Mapping = cfg.analysisMapping()
+                    #print (Mapping)
+                    self.setItemToQTableWidget(self.Mapping_tableWidget, Mapping)
+                    #填入maya版本号
+                    mayaver = cfg.analysisSoft()
+                    self.Version_lineEdit.setText(mayaver)
+
+                    sysPath = cfg.analysisPath()
+
+                    #maya文件目录
+                    self.k_inputPath = sysPath['input_cg_file']
+                    self.k_inputPath = os.path.dirname(self.k_inputPath).replace('/','\\')
+                    #print(self.k_inputPath)
+
+                    #maya输出图片目录
+                    self.k_outputPath = sysPath['output_user_path'].replace('/','\\')
+                    #print(self.k_outputPath)
+
+                    #B盘 插件路径
+                    if 'plugin_path' in sysPath:
+                        self.k_pluginPath = sysPath['plugin_path']
+                    elif 'plugin_path_list' in sysPath:
+                        self.k_pluginPath = sysPath['plugin_path_list'][0]
+
+                    #脚本 function文件夹路径
+                    self.function_path = cfg.function_path
+
+
+                    #定制脚本  function script 文件夹路径
+                    self.C_function_path = os.path.normpath(cfg.C_function_path)
+                    self.C_script_path   = os.path.normpath(cfg.C_script_path)
+
+
+
+            elif self.PlatformMode_CB.currentText() in ['China']:
+
+                cfg = analysis_cfg_china.analysisCfg(k_platform, k_taskID, k_useID)
+
+                if cfg.k_jsonerror:
+                    self.msg('cannot find cfg.json')
+
+                else:
+                    # 填入plugins数据
+                    Plugins = cfg.analysisPlugins()
+                    print (Plugins)
+
+                    a= cfg.analysisPath()
+                    print (a)
+
+
 
     def OpenInput(self):
         """ Input按钮功能 """
@@ -165,9 +204,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         #app.exit()
         #self.getData()
         #app.exec_()
-
-        #print (self.function_path,self.script_path,self.C_function_path,self.C_script_path)
-
+        self.RBgroupBox.hide()
 
 
     def getData(self):
