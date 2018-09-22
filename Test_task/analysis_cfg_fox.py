@@ -4,11 +4,13 @@ import os
 import re
 class analysisCfg():
     def __init__(self,platform,taskID,userID):
-
-        delfix = re.findall('^\d?\D', taskID)
-        if delfix:
-            taskID = taskID.replace(delfix[0], '')
-
+        self.platform = platform
+        self.taskID =taskID
+        self.userID = userID
+        # delfix = re.findall('^\d?\D', taskID)
+        # if delfix:
+        #     taskID = taskID.replace(delfix[0], '')
+        self.taskID = re.sub('^\d?\D', '', taskID)
 
         self.k_jsonerror = False
 
@@ -22,11 +24,13 @@ class analysisCfg():
 
 
         userID_up =''
-
-        if int(userID[-3:]) >= 500:
-            userID_up = str(int(userID) - int(userID[-3:]) + 500)
-        else:
-            userID_up = str(int(userID) - int(userID[-3:]))
+        try:
+            if int(userID[-3:]) >= 500:
+                userID_up = str(int(userID) - int(userID[-3:]) + 500)
+            else:
+                userID_up = str(int(userID) - int(userID[-3:]))
+        except Exception as e:
+            print (e)
 
         cfg_jsonPath = os.path.join(platform_address[platform],'render_p','config',userID_up,userID,taskID,'cfg','task.json')
         sys_jsonPath = os.path.join(platform_address[platform],'render_p','config',userID_up,userID,taskID,'sys_cfg','system.json')

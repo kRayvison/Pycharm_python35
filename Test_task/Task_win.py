@@ -149,8 +149,12 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                     Plugins = cfg.analysisPlugins()
                     print (Plugins)
 
-                    a= cfg.analysisPath()
-                    print (a)
+                    #a= cfg.analysisPath()
+                    #print (a)
+                    #print (a[5])
+
+                    b = cfg.analysisMapping()
+                    print (b)
 
 
 
