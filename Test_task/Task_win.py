@@ -98,42 +98,27 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                 else:
                     #填入plugins数据
                     Plugins = cfg.analysisPlugins()
-                    #print (Plugins)
                     self.setItemToQTableWidget(self.Plugins_tableWidget,Plugins)
 
+                    #填入maya版本号
+                    Mayaver = cfg.analysisSoft()
+                    self.Version_lineEdit.setText(Mayaver)
 
                     #填入Mapping数据
                     Mapping = cfg.analysisMapping()
-                    #print (Mapping)
                     self.setItemToQTableWidget(self.Mapping_tableWidget, Mapping)
-                    #填入maya版本号
-                    mayaver = cfg.analysisSoft()
-                    self.Version_lineEdit.setText(mayaver)
 
-                    sysPath = cfg.analysisPath()
 
+                    Aspath= cfg.analysisPath()
                     #maya文件目录
-                    self.k_inputPath = sysPath['input_cg_file']
-                    self.k_inputPath = os.path.dirname(self.k_inputPath).replace('/','\\')
-                    #print(self.k_inputPath)
-
+                    self.k_inputPath  = Aspath[0]
                     #maya输出图片目录
-                    self.k_outputPath = sysPath['output_user_path'].replace('/','\\')
-                    #print(self.k_outputPath)
+                    self.k_outputPath = Aspath[1]
+                    #自定义文件夹目录
+                    self.k_customfile = Aspath[2]
+                    #prerender文件夹目录
+                    self.C_script_path = Aspath[3]
 
-                    #B盘 插件路径
-                    if 'plugin_path' in sysPath:
-                        self.k_pluginPath = sysPath['plugin_path']
-                    elif 'plugin_path_list' in sysPath:
-                        self.k_pluginPath = sysPath['plugin_path_list'][0]
-
-                    #脚本 function文件夹路径
-                    self.function_path = cfg.function_path
-
-
-                    #定制脚本  function script 文件夹路径
-                    self.C_function_path = os.path.normpath(cfg.C_function_path)
-                    self.C_script_path   = os.path.normpath(cfg.C_script_path)
 
 
 
@@ -145,16 +130,30 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                     self.msg('cannot find cfg.json')
 
                 else:
-                    # 填入plugins数据
+                    #填入plugins数据
                     Plugins = cfg.analysisPlugins()
-                    print (Plugins)
+                    self.setItemToQTableWidget(self.Plugins_tableWidget,Plugins)
 
-                    #a= cfg.analysisPath()
-                    #print (a)
-                    #print (a[5])
+                    #填入maya版本号
+                    Mayaver = cfg.analysisSoft()
+                    self.Version_lineEdit.setText(Mayaver)
 
-                    b = cfg.analysisMapping()
-                    print (b)
+                    #填入Mapping数据
+                    Mapping = cfg.analysisMapping()
+                    self.setItemToQTableWidget(self.Mapping_tableWidget, Mapping)
+
+
+                    Aspath= cfg.analysisPath()
+                    #maya文件目录
+                    self.k_inputPath  = Aspath[0]
+                    #maya输出图片目录
+                    self.k_outputPath = Aspath[1]
+                    #自定义文件夹目录
+                    self.k_customfile = Aspath[2]
+                    #prerender文件夹目录
+                    self.C_script_path = Aspath[3]
+
+
 
 
 
@@ -175,24 +174,19 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
             self.msg('%s path is not exists' %self.k_outputPath)
 
 
-
-    #Preferences按钮功能
     def OpenCustom_files(self):
-        B_custom_files = os.path.join(self.k_pluginPath,'config_files',self.UserID_lineEdit.text())
-        print (B_custom_files)
-
-
-        if os.path.exists(B_custom_files):
-            os.startfile(B_custom_files)
+        """Preferences按钮功能"""
+        if os.path.exists(self.k_customfile):
+            os.startfile(self.k_customfile)
         else:
-            self.msg('%s path is not exists' %B_custom_files)
+            self.msg('%s path is not exists' %self.k_customfile)
 
     def OpenPrerender(self):
-        Prerender_path = os.path.join(self.C_script_path)
-        if os.path.exists(Prerender_path):
-            os.startfile(Prerender_path)
+        """prerender按钮功能"""
+        if os.path.exists(self.C_script_path):
+            os.startfile(self.C_script_path)
         else:
-            self.msg('%s path is not exists' %Prerender_path)
+            self.msg('%s path is not exists' %self.C_script_path)
 
     def knetuse(self):
         """根据 mapping的内容 映射盘符"""

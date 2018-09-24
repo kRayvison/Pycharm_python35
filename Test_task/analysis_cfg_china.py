@@ -107,18 +107,21 @@ class analysisCfg():
 
 
     def analysisPlugins(self):
+        """return maya插件 (字典格式)"""
         k_plugins = {}
         k_plugins = (self.plugins_info['plugins'] if self.plugins_info['plugins'] else '')
         return k_plugins
 
     def analysisSoft(self):
+        """return maya版本"""
         k_mayaver = ''
-        if self.plugins_info['renderSoftware'] == 'Maya':
+        if self.plugins_info['renderSoftware'].lower() == 'maya':
             k_mayaver = self.plugins_info['softwareVer']
         else : k_mayaver = 'It is not maya task!!!'
         return k_mayaver
 
     def analysisMapping(self):
+        """renturn 映射盘符"""
         k_path = self.analysisPath()
 
         k_mapping = {}
@@ -146,11 +149,11 @@ class analysisCfg():
                         netdict = {key_diver:netpath}
                         k_mapping.update(netdict)
 
-        print(k_mapping)
+
         return k_mapping
 
     def analysisPath(self):
-
+        """return 数据为 1 = maya文件地址, 2=图片输出地址,3=用户自定义文件夹,4=prerender文件夹,5=B盘路径"""
 
         # B盘插件路径
         self.B_plugin_path = ''
@@ -168,7 +171,7 @@ class analysisCfg():
         C_prerender_path = os.path.join(self.platform_address[self.platform], 'o5', 'py', 'model', 'user', self.userID)
 
 
-        print('1111')
+
         if self.render_mode == 'client':
 
             #图片输出路径
@@ -193,22 +196,21 @@ class analysisCfg():
                 k_input_filePath = os.path.join(k_input_proj,g_input_file)
 
         elif self.render_mode == 'web':
-            print('222')
+
             #获取 k_input_filePath
             if 'common' in self.web_render_info:
                 if 'inputCgFile' in self.web_render_info['common']:
                     k_input_file = self.web_render_info['common']['inputCgFile']
                     k_input_filePath = os.path.dirname(k_input_file)
-                    print(k_input_filePath)
                 else:print('Get input file path error ----!!!!')
-            print('3333')
+
             #获取k_user_outputPath
             if 'common' in self.web_render_info:
                 if 'userOutputPath' in self.web_render_info['common']:
                     k_output_file = self.web_render_info['common']['userOutputPath']
                     k_user_outputPath = os.path.dirname(k_output_file)
-                    print(k_user_outputPath)
                 else:print('Get output file path error ----!!!!')
+
 
 
         return (k_input_filePath,k_user_outputPath,customfile_Path,C_prerender_path,self.B_plugin_path)
