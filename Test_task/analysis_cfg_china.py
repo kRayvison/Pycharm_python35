@@ -5,8 +5,8 @@ import re
 class analysisCfg():
     def __init__(self,platform,taskID,userID):
         self.platform = platform
-        self.taskID =taskID
-        self.userID = userID
+        self.taskID =str(taskID)
+        self.userID = str(userID)
 
         self.render_mode = ''
 
@@ -21,11 +21,7 @@ class analysisCfg():
                             'c_W4rb':r'\\10.40.100.101','c_W9rb':r'\\10.80.100.101',\
                             'c_GPUrb':r'\\10.90.100.101'}
 
-        # cfg_jsonPath = r'D:\Work\cfg\cfg\task.json'
-        # sys_jsonPath = r'D:\Work\cfg\sys_cfg\system.json'
-        #
-        # self.k_cfg_json = json.loads(open(cfg_jsonPath).read())
-        # self.k_sys_json = json.loads(open(sys_jsonPath).read())
+
 
 
         self.userID_up =''
@@ -45,12 +41,13 @@ class analysisCfg():
         #\\10.60.100.101\p5\config\1163000\1163153\10583609
         #\\10.60.100.101\p5\temp\10583609_render\cfg
 
-        #py_cfg_Path = os.path.join(platform_address[platform],'p5','temp','%s_render','cfg' %taskID)
-        #web_cfg_Path = os.path.join(platform_address[platform],'p5','config',self.userID_up,self.userID,self.taskID)
+        py_cfg_Path = os.path.join(self.platform_address[platform],'p5','temp','%s_render','cfg' %self.taskID)
+
+        web_cfg_Path = os.path.join(self.platform_address[platform],'p5','config',self.userID_up,self.userID,self.taskID)
 
         #py_cfg_Path = r'D:\Work\china_client\cfg'
-        py_cfg_Path = r'D:\Work\china_web\cfg'
-        web_cfg_Path = r'D:\Work\china_web\10583609'
+        # py_cfg_Path = r'D:\Work\china_web\cfg'
+        # web_cfg_Path = r'D:\Work\china_web\10583609'
 
         py_cfg_p      = os.path.join(py_cfg_Path,'py.cfg')
         #客户端配置文件路径

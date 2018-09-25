@@ -14,13 +14,13 @@ class analysisCfg():
 
         self.k_jsonerror = False
 
-        platform_address = {'W2rb':r'\\10.60.100.101','W9rb':r'\\10.80.100.101','GPUrb':r'\\10.90.100.101'}
+        self.platform_address = {'W2rb':r'\\10.60.100.101','W9rb':r'\\10.80.100.101','GPUrb':r'\\10.90.100.101'}
 
-        cfg_jsonPath = r'D:\Work\fox\cfg\task.json'
-        sys_jsonPath = r'D:\Work\fox\sys_cfg\system.json'
-
-        self.k_cfg_json = json.loads(open(cfg_jsonPath).read())
-        self.k_sys_json = json.loads(open(sys_jsonPath).read())
+        # cfg_jsonPath = r'D:\Work\fox\cfg\task.json'
+        # sys_jsonPath = r'D:\Work\fox\sys_cfg\system.json'
+        #
+        # self.k_cfg_json = json.loads(open(cfg_jsonPath).read())
+        # self.k_sys_json = json.loads(open(sys_jsonPath).read())
 
 
         userID_up =''
@@ -32,24 +32,24 @@ class analysisCfg():
         except Exception as e:
             print (e)
 
-        # cfg_jsonPath = os.path.join(platform_address[platform],'render_p','config',userID_up,userID,taskID,'cfg','task.json')
-        # sys_jsonPath = os.path.join(platform_address[platform],'render_p','config',userID_up,userID,taskID,'sys_cfg','system.json')
-        # cfg_jsonPath = os.path.normpath(cfg_jsonPath)
-        # sys_jsonPath = os.path.normpath(sys_jsonPath)
-        # print (cfg_jsonPath)
-        #
-        # if os.path.exists(cfg_jsonPath) and os.path.exists(sys_jsonPath):
-        #
-        #     self.k_cfg_json = json.loads(open(cfg_jsonPath).read())
-        #     self.k_sys_json = json.loads(open(sys_jsonPath).read())
-        #
-        # else:self.k_jsonerror = True
+        cfg_jsonPath = os.path.join(self.platform_address[platform],'render_p','config',userID_up,userID,taskID,'cfg','task.json')
+        sys_jsonPath = os.path.join(self.platform_address[platform],'render_p','config',userID_up,userID,taskID,'sys_cfg','system.json')
+        cfg_jsonPath = os.path.normpath(cfg_jsonPath)
+        sys_jsonPath = os.path.normpath(sys_jsonPath)
+        print (cfg_jsonPath)
 
-        self.function_path = os.path.join(platform_address[platform],'render_p','script','CG','Maya','function')
-        self.script_path   = os.path.join(platform_address[platform],'render_p','script','CG','Maya','script')
+        if os.path.exists(cfg_jsonPath) and os.path.exists(sys_jsonPath):
 
-        self.C_function_path = os.path.join(platform_address[platform], 'render_p', 'script', 'User', userID,'CG','Maya','function')
-        self.C_script_path   = os.path.join(platform_address[platform], 'render_p', 'script', 'User', userID, 'CG', 'Maya', 'function')
+            self.k_cfg_json = json.loads(open(cfg_jsonPath).read())
+            self.k_sys_json = json.loads(open(sys_jsonPath).read())
+
+        else:self.k_jsonerror = True
+
+        self.function_path = os.path.join(self.platform_address[platform],'render_p','script','CG','Maya','function')
+        self.script_path   = os.path.join(self.platform_address[platform],'render_p','script','CG','Maya','script')
+
+        self.C_function_path = os.path.join(self.platform_address[platform], 'render_p', 'script', 'User', userID,'CG','Maya','function')
+        self.C_script_path   = os.path.join(self.platform_address[platform], 'render_p', 'script', 'User', userID, 'CG', 'Maya', 'function')
 
     def analysisPlugins(self):
         """return maya插件 (字典格式)"""
