@@ -51,6 +51,7 @@ class analysisCfg():
         self.C_function_path = os.path.join(self.platform_address[platform], 'render_p', 'script', 'User', userID,'CG','Maya','function')
         self.C_script_path   = os.path.join(self.platform_address[platform], 'render_p', 'script', 'User', userID, 'CG', 'Maya', 'function')
 
+
     def analysisPlugins(self):
         """return maya插件 (字典格式)"""
         k_plugins = {}

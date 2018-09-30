@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -51,7 +50,8 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
         self.PlatformMode_CB.currentIndexChanged.connect(self.kchangeModel)
 
-
+        self.C_function_path = ''
+        self.custom_file = ''
         #maya首选项目录
 
         #获取窗口的信息
@@ -86,7 +86,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
 
 
-
+        #没有设置好 盘符 任务ID 和 用户ID  弹出报错
         if not k_platform or not k_taskID or not k_useID:
             self.msg('No specified Platform or ID')
 
@@ -122,15 +122,33 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                 #maya输出图片目录
                 self.k_outputPath = Aspath[1]
                 #自定义文件夹目录
-                self.k_customfile = Aspath[2]
+                self.k_custompath = Aspath[2]
                 #prerender文件夹目录
                 self.C_script_path = Aspath[3]
+                #B盘路径
+                self.B_path = Aspath[4]
+
 
                 if self.PlatformMode_CB.currentText() in ['Fox']:
+                    #自定义function的路径 (mayaplugin路径,自定义py文件路径)
                     self.C_function_path = cfg.C_function_path
                     print(self.C_function_path)
                     self.function_path = cfg.function_path
                     print(self.function_path)
+
+                    #自定义文件路径
+                    self.custom_file = os.path.normpath(os.path.join(self.C_function_path,'CustomConfig.py'))
+
+                elif self.PlatformMode_CB.currentText() in ['China']:
+                    #自定义function的路径 (mayaplugin路径,自定义py文件路径)
+
+                    self.function_path = cfg.function_path
+                    print(self.function_path)
+
+                    #自定义文件路径
+                    self.custom_file = os.path.normpath(os.path.join(self.B_path,'custom_config',\
+                                                                     k_useID,'RayvisionCustomConfig.py'))
+
 
     def OpenInput(self):
         """ Input按钮功能 """
@@ -151,10 +169,10 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
     def OpenCustom_files(self):
         """Preferences按钮功能"""
-        if os.path.exists(self.k_customfile):
-            os.startfile(self.k_customfile)
+        if os.path.exists(self.k_custompath):
+            os.startfile(self.k_custompath)
         else:
-            self.msg('%s path is not exists' %self.k_customfile)
+            self.msg('%s path is not exists' %self.k_custompath)
 
     def OpenPrerender(self):
         """prerender按钮功能"""
@@ -201,21 +219,23 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
         plugin_cfg_file = {u'cg_name':'Maya','cg_version':self.getMayaVer,'plugins':self.getPluginsQtab}
 
-        custom_file = os.path.join(self.C_function_path,'CustomConfig.py')
 
-        #C_MayaPluginPY = os.path.join(self.C_function_path, 'MayaPlugin.py')
-        #MayaPluginPY   = os.path.join(self.function_path, 'MayaPlugin.py')
         if os.path.exists(self.C_function_path):
+            print('import C_function_path')
             sys.path.append(self.C_function_path)
             #__import__('MayaPlugin')
             import MayaPlugin
+
         elif os.path.exists(self.function_path):
+            print('import function_path')
             print (self.function_path)
             sys.path.append(self.function_path)
             #__import__('MayaPlugin')
             import MayaPlugin
 
-        maya_plugin = MayaPlugin.MayaPlugin(plugin_cfg_file,[custom_file])
+        print('plugin_cfg_file is %s' % plugin_cfg_file)
+        print('self.custom_file is %s' %self.custom_file)
+        maya_plugin = MayaPlugin.MayaPlugin(plugin_cfg_file,[self.custom_file])
         maya_plugin.config()
 
     def excuteMaya(self):

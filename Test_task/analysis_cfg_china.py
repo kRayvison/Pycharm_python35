@@ -5,15 +5,15 @@ import re
 class analysisCfg():
     def __init__(self,platform,taskID,userID):
         self.platform = platform
-        self.taskID =str(taskID)
-        self.userID = str(userID)
+        self.taskID =taskID
+        self.userID = userID
 
         self.render_mode = ''
 
         # delfix = re.findall('^\d?\D', taskID)
         # if delfix:
         #     taskID = taskID.replace(delfix[0], '')
-        self.taskID = re.sub('^\d?\D','',taskID)
+        self.taskID = re.sub('^\d?\D','',self.taskID)
 
         self.k_jsonerror = False
 
@@ -41,10 +41,10 @@ class analysisCfg():
         #\\10.60.100.101\p5\config\1163000\1163153\10583609
         #\\10.60.100.101\p5\temp\10583609_render\cfg
 
-        py_cfg_Path = os.path.join(self.platform_address[platform],'p5','temp','%s_render','cfg' %self.taskID)
-
+        py_cfg_Path = os.path.join(self.platform_address[platform],'p5','temp','%s_render'%self.taskID,'cfg' )
+        print(py_cfg_Path)
         web_cfg_Path = os.path.join(self.platform_address[platform],'p5','config',self.userID_up,self.userID,self.taskID)
-
+        print(web_cfg_Path)
         #py_cfg_Path = r'D:\Work\china_client\cfg'
         # py_cfg_Path = r'D:\Work\china_web\cfg'
         # web_cfg_Path = r'D:\Work\china_web\10583609'
@@ -129,8 +129,13 @@ class analysisCfg():
                     kexp = r'^(\w:)'
                     #匹配字母开头
                     if re.findall(kexp,str(key_diver)):
-                        netpath = os.path.join(self.storage_path,self.server_info['mounts'][key_diver])
+                        #替换掉开头的字符
+                        kstart = r'^(/)'
+                        k_mountsp = re.sub(kstart, '',self.server_info['mounts'][key_diver])
+
+                        netpath = os.path.join(self.storage_path,k_mountsp)
                         netdict = {key_diver:os.path.normpath(netpath)}
+
                         k_mapping.update(netdict)
 
             B_plugin_path = {'B:':self.B_plugin_path}
