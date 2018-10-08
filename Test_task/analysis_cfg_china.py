@@ -53,6 +53,7 @@ class analysisCfg():
         #客户端配置文件路径
         plugins_cfg_p = os.path.join(py_cfg_Path,'plugins.cfg')
         server_cfg_p  = os.path.join(py_cfg_Path,'server.cfg')
+        render_cfg_p = os.path.join(py_cfg_Path, 'render.cfg')
         #网页端配置文件路径
         web_plugins_json_p = os.path.join(web_cfg_Path,'plugins.json')
         web_render_json_p = os.path.join(web_cfg_Path, 'render.json')
@@ -75,6 +76,20 @@ class analysisCfg():
                         break
                 self.py_info = result
 
+            render_result = {}
+            with open(render_cfg_p,"r") as f:
+                while 1:
+                    line = f.readline()
+                    if "=" in line:
+                        line_split = line.split("=")
+                        render_result[line_split[0].strip()] = line_split[1].strip()
+                    if ">>" in line:
+                        break
+                    if "[delete]" in line:
+                        break
+                self.render_info = render_result
+
+
 
         elif os.path.exists(py_cfg_p) and os.path.exists(web_plugins_json_p) and os.path.exists(web_render_json_p):
             #网页端
@@ -93,6 +108,7 @@ class analysisCfg():
                     else:
                         break
                 self.py_info = result
+
 
 
         else:self.k_jsonerror = True
@@ -124,16 +140,20 @@ class analysisCfg():
         k_mapping = {}
         #客户端
         if self.render_mode == 'client':
-            if 'mounts' in self.server_info:
-                for key_diver in self.server_info['mounts']:
+            print('client mapping analysis')
+            if 'mountFrom' in self.render_info:
+                k_mountFrom = eval(self.render_info['mountFrom'])
+                for diver_path,key_diver in k_mountFrom.items():
+                    print(diver_path,key_diver)
                     kexp = r'^(\w:)'
                     #匹配字母开头
                     if re.findall(kexp,str(key_diver)):
                         #替换掉开头的字符
                         kstart = r'^(/)'
-                        k_mountsp = re.sub(kstart, '',self.server_info['mounts'][key_diver])
-
+                        k_mountsp = re.sub(kstart, '',diver_path)
+                        print('k_mountsp =%s' %k_mountsp)
                         netpath = os.path.join(self.storage_path,k_mountsp)
+                        print('netpath =%s' %netpath)
                         netdict = {key_diver:os.path.normpath(netpath)}
 
                         k_mapping.update(netdict)
@@ -202,7 +222,11 @@ class analysisCfg():
             #获取 k_input_filePath
             if 'common' in self.web_render_info:
                 if 'inputCgFile' in self.web_render_info['common']:
-                    k_input_file = self.web_render_info['common']['inputCgFile']
+                    k_input_file = ''
+                    if 'inputCgFile' in self.web_render_info['common']:
+                        k_input_file = self.web_render_info['common']['inputCgFile']
+                    elif 'cgFile' in self.web_render_info['common']:
+                        k_input_file = self.web_render_info['common']['cgFile']
                     k_input_filePath = os.path.dirname(k_input_file)
                 else:print('Get input file path error ----!!!!')
 

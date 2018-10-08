@@ -99,6 +99,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
                 cfg = analysis_cfg_china.analysisCfg(k_platform, k_taskID, k_useID)
 
+
             if cfg.k_jsonerror:
                 self.msg('cannot find cfg.json')
 
@@ -106,15 +107,17 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                 #填入plugins数据
                 Plugins = cfg.analysisPlugins()
                 self.setItemToQTableWidget(self.Plugins_tableWidget,Plugins)
+                print('Finish get Plugins analysis')
 
                 #填入maya版本号
                 Mayaver = cfg.analysisSoft()
                 self.Version_lineEdit.setText(Mayaver)
+                print('Finish get Mayaver analysis')
 
                 #填入Mapping数据
                 Mapping = cfg.analysisMapping()
                 self.setItemToQTableWidget(self.Mapping_tableWidget, Mapping)
-
+                print('Finish get Mapping analysis')
 
                 Aspath= cfg.analysisPath()
                 #maya文件目录
@@ -127,7 +130,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                 self.C_script_path = Aspath[3]
                 #B盘路径
                 self.B_path = Aspath[4]
-
+                print('Finish get Path analysis')
 
                 if self.PlatformMode_CB.currentText() in ['Fox']:
                     #自定义function的路径 (mayaplugin路径,自定义py文件路径)
@@ -138,6 +141,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
                     #自定义文件路径
                     self.custom_file = os.path.normpath(os.path.join(self.C_function_path,'CustomConfig.py'))
+                    print('Finish get Fox customfile')
 
                 elif self.PlatformMode_CB.currentText() in ['China']:
                     #自定义function的路径 (mayaplugin路径,自定义py文件路径)
@@ -148,7 +152,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                     #自定义文件路径
                     self.custom_file = os.path.normpath(os.path.join(self.B_path,'custom_config',\
                                                                      k_useID,'RayvisionCustomConfig.py'))
-
+                    print('Finish get China customfile')
 
     def OpenInput(self):
         """ Input按钮功能 """
