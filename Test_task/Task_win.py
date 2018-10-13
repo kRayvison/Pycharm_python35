@@ -352,7 +352,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
     kwin = k_Taskwindow()
-    MainWindow.setWindowTitle(u'测试任务工具')
+    MainWindow.setWindowTitle(u'环境配置工具 v1.0')
 
     MainWindow.show()
     sys.exit(app.exec_())
