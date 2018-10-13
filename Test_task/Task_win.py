@@ -25,7 +25,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         self.Plugins_tableWidget.setColumnWidth(1,130)
 
         self.TextCMD.hide()
-        self.RBgroupBox_layoutWidget2.hide()
+        self.RBgroupBox_layoutWidget.hide()
 
 
         #按钮功能设置
@@ -57,6 +57,8 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         #获取窗口的信息
         #self.getData()
 
+
+
     def kchangeModel(self):
         "转换平台模式"
 
@@ -68,6 +70,9 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
             self.RBgroupBox_layoutWidget.hide()
 
     def kGetcfg(self):
+        """根据用户ID 任务ID分析数据 """
+        #添加凭据
+        self.add_cmdkey()
         k_platform = ''
 
         k_taskID = self.TaskID_lineEdit.text()
@@ -194,12 +199,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
     def kclose(self):
         """close按钮功能"""
-        #self.close()
-        #self.hide()
-        #app.exit()
-        #self.getData()
-        app.exec_()
-
+        app.exit()
 
 
     def getData(self):
@@ -243,6 +243,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         maya_plugin.config()
 
     def excuteMaya(self):
+        """执行maya按钮"""
         self.excuteBefore()
 
         cmd_str = r"C:\Program Files\Autodesk\Maya%s\bin\maya.exe" % (self.getMayaVer)
@@ -251,6 +252,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         print ('startfile %s' %cmd_str)
 
     def excuteCMD(self):
+        """执行cmd按钮"""
         self.TextCMD.show()
 
         CMDText = self.TextCMD.toPlainText()
@@ -259,7 +261,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
             self.excuteBefore()
 
             CLASS_COMMON_UTIL.cmd(CMDText,continue_on_error=True, my_shell=True)
-            #os.system(CMDText)
+
 
     def getItemfromQTableWidget(self,QTablename):
         """获取QTab内每个格子的数据，并组成字典，QTablename输入的数据为QTab的名字"""
@@ -326,6 +328,25 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                                         "出问题啦，请注意！！！",
                                         message,
                                         QMessageBox.Yes)
+
+    def add_cmdkey(self):
+        """添加IP 凭据"""
+        self.k_cmdkey = {'10.60.100.101': {'user': 'enfuzion', 'password': 'ruiyun2016'}, \
+                         '10.30.100.102': {'user': 'enfuzion', 'password': 'Raywing@host8'}, \
+                         '10.30.100.151': {'user': 'enfuzion', 'password': 'Raywing@host8'}, \
+                         '10.40.100.101': {'user': 'enfuzion', 'password': 'Raywing@host8'}, \
+                         '10.40.100.151': {'user': 'enfuzion', 'password': 'Raywing@host8'}, \
+                         '10.80.100.101': {'user': 'enfuzion', 'password': 'ruiyun2017'}, \
+                         '10.80.243.50' : {'user': 'enfuzion', 'password': 'ruiyun2017'}, \
+                         '10.90.100.101': {'user': 'enfuzion', 'password': 'ruiyun2016'}, \
+                         '10.90.96.51'  : {'user': 'enfuzion', 'password': 'ruiyun2016'}, \
+                         }
+
+        for k_ip in self.k_cmdkey:
+            set_cmdkey = 'cmdkey /add:{0} /user:{1} /password:{2}'.format(k_ip,self.k_cmdkey[k_ip]['user'],self.k_cmdkey[k_ip]['password'])
+            CLASS_COMMON_UTIL.cmd(set_cmdkey, continue_on_error=True, my_shell=True)
+
+        print('添加全平台 B盘及o5 地址凭据完毕!')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

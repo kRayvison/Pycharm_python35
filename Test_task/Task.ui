@@ -126,12 +126,12 @@ QTableWidget{
         </property>
         <item>
          <property name="text">
-          <string>Fox</string>
+          <string>China</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>China</string>
+          <string>Fox</string>
          </property>
         </item>
        </widget>
@@ -348,8 +348,6 @@ font-family: &quot;Segoe UI&quot;;</string>
                </item>
               </layout>
              </widget>
-             <zorder>layoutWidget_4</zorder>
-             <zorder>c_GPUrb</zorder>
             </widget>
            </item>
            <item>

@@ -221,14 +221,14 @@ class analysisCfg():
 
             #获取 k_input_filePath
             if 'common' in self.web_render_info:
+                k_input_file = ''
                 if 'inputCgFile' in self.web_render_info['common']:
-                    k_input_file = ''
-                    if 'inputCgFile' in self.web_render_info['common']:
-                        k_input_file = self.web_render_info['common']['inputCgFile']
-                    elif 'cgFile' in self.web_render_info['common']:
-                        k_input_file = self.web_render_info['common']['cgFile']
-                    k_input_filePath = os.path.dirname(k_input_file)
+                    k_input_file = self.web_render_info['common']['inputCgFile']
+                elif 'cgFile' in self.web_render_info['common']:
+                    k_input_file = self.web_render_info['common']['cgFile']
                 else:print('Get input file path error ----!!!!')
+
+                k_input_filePath = os.path.dirname(k_input_file)
 
             #获取k_user_outputPath
             if 'common' in self.web_render_info:

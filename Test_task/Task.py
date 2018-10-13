@@ -178,8 +178,6 @@ class Ui_MainWindow(object):
         self.c_GPUrb = QtWidgets.QRadioButton(self.layoutWidget_4)
         self.c_GPUrb.setObjectName("c_GPUrb")
         self.grouprb_horizontalLayout2_2.addWidget(self.c_GPUrb)
-        self.layoutWidget_4.raise_()
-        self.c_GPUrb.raise_()
         self.RBGroupBox_horizontalLayout2.addWidget(self.RBgroupBox2)
         spacerItem4 = QtWidgets.QSpacerItem(60, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.RBGroupBox_horizontalLayout2.addItem(spacerItem4)
@@ -403,8 +401,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.PlatformMode_CB.setItemText(0, _translate("MainWindow", "Fox"))
-        self.PlatformMode_CB.setItemText(1, _translate("MainWindow", "China"))
+        self.PlatformMode_CB.setItemText(0, _translate("MainWindow", "China"))
+        self.PlatformMode_CB.setItemText(1, _translate("MainWindow", "Fox"))
         self.Platform_Label.setText(_translate("MainWindow", "Platform"))
         self.W2rb.setText(_translate("MainWindow", "W2"))
         self.W9rb.setText(_translate("MainWindow", "W9"))
