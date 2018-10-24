@@ -331,28 +331,56 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
     def add_cmdkey(self):
         """添加IP 凭据"""
-        self.k_cmdkey = {'10.60.100.101': {'user': 'enfuzion', 'password': 'ruiyun2016'}, \
-                         '10.30.100.102': {'user': 'enfuzion', 'password': 'Raywing@host8'}, \
-                         '10.30.100.151': {'user': 'enfuzion', 'password': 'Raywing@host8'}, \
-                         '10.40.100.101': {'user': 'enfuzion', 'password': 'Raywing@host8'}, \
-                         '10.40.100.151': {'user': 'enfuzion', 'password': 'Raywing@host8'}, \
-                         '10.80.100.101': {'user': 'enfuzion', 'password': 'ruiyun2017'}, \
-                         '10.80.243.50' : {'user': 'enfuzion', 'password': 'ruiyun2017'}, \
-                         '10.90.100.101': {'user': 'enfuzion', 'password': 'ruiyun2016'}, \
-                         '10.90.96.51'  : {'user': 'enfuzion', 'password': 'ruiyun2016'}, \
-                         }
+        keyplan1 = {'user': 'enfuzion', 'password': 'ruiyun2016'}
+        keyplan2 = {'user': 'enfuzion', 'password': 'ruiyun2017'}
+        keyplan3 = {'user': 'enfuzion', 'password': 'Raywing@host8'}
+
+        keyplan4 = {'user': 'enfuzion', 'password': 'Raywing@host8-2'}
+        keyplan5 = {'user': 'enfuzion', 'password': 'Raywing@host8-9'}
+        keyplan6 = {'user': 'tdadmin', 'password': 'Ray@td852'}
+        keyplan7 = {'user': 'administrator', 'password': 'Ruiyun@2016'}
+
+
+        k_ipsort = {'w2': ['10.60.100.101','10.60.100.151'],\
+                    'w3': ['10.30.100.102', '10.30.100.102', '10.30.100.201', '10.30.100.202'], \
+                    'w4': ['10.40.100.101', '10.40.100.102', '10.40.100.103', '10.40.100.201', '10.40.100.202'], \
+                    'w9': ['10.80.100.101','10.80.100.102', '10.80.100.103', '10.80.100.104', '10.70.242.101', '10.70.242.102', \
+                           '10.80.100.201', '10.80.100.202', '10.80.100.203','10.70.242.201'],\
+                    'gpu': ['10.90.100.101', '10.90.100.102', '10.90.100.103', '10.90.100.201', '10.90.100.202'] \
+                    'B_plugins':["10.60.100.151","10.60.200.150","10.60.200.151","10.60.100.152","10.80.243.50","10.80.243.51",\
+                                 "10.30.100.151","10.30.100.152","10.40.100.151","10.40.100.152","10.90.96.51"]\
+                    }
+
+        self.k_cmdkey = {}
+
+        for ip_key in k_ipsort:
+            if ip_key in ['w2']:
+                for ip_value in k_ipsort[ip_key]:
+                    k_cmdkey.update({ip_value: keyplan4})
+            if ip_key in ['gpu']:
+                for ip_value in k_ipsort[ip_key]:
+                    k_cmdkey.update({ip_value: keyplan1})
+            if ip_key in ['w3', 'w4']:
+                for ip_value in k_ipsort[ip_key]:
+                    k_cmdkey.update({ip_value: keyplan3})
+            if ip_key in ['w9']:
+                for ip_value in k_ipsort[ip_key]:
+                    k_cmdkey.update({ip_value: keyplan5})
+            if ip_key in ['B_plugins']:
+                for ip_value in k_ipsort[ip_key]:
+                    k_cmdkey.update({ip_value: keyplan6})
 
         for k_ip in self.k_cmdkey:
             set_cmdkey = 'cmdkey /add:{0} /user:{1} /password:{2}'.format(k_ip,self.k_cmdkey[k_ip]['user'],self.k_cmdkey[k_ip]['password'])
             CLASS_COMMON_UTIL.cmd(set_cmdkey, continue_on_error=True, my_shell=True)
 
-        print('添加全平台 B盘及o5 地址凭据完毕!')
+        print('添加全平台 地址凭据完毕!')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
     kwin = k_Taskwindow()
-    MainWindow.setWindowTitle(u'环境配置工具 v1.0')
+    MainWindow.setWindowTitle(u'环境配置工具 v1.2')
 
     MainWindow.show()
     sys.exit(app.exec_())
