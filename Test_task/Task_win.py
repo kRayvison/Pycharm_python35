@@ -29,7 +29,9 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
 
         #按钮功能设置
+        self.IPkey.clicked.connect(self.add_cmdkey)
         self.Get_Button.clicked.connect(self.kGetcfg)
+
 
         self.Mapping_netuse.clicked.connect(self.knetuse)
         self.Mapping_add.clicked.connect(self.setBlankToMappingQTable)
@@ -52,10 +54,9 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
         self.C_function_path = ''
         self.custom_file = ''
-        #maya首选项目录
 
-        #获取窗口的信息
-        #self.getData()
+        self.k_one = True
+        self.k_ip_on = True
 
 
 
@@ -71,8 +72,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
     def kGetcfg(self):
         """根据用户ID 任务ID分析数据 """
-        #添加凭据
-        self.add_cmdkey()
+
         k_platform = ''
 
         k_taskID = self.TaskID_lineEdit.text()
@@ -159,6 +159,13 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                                                                      k_useID,'RayvisionCustomConfig.py'))
                     print('Finish get China customfile')
 
+                    #dirmap的字典
+                    self.k_dirmap = ''
+                    if 'mappings' in cfg.server_info:
+                        self.k_dirmap = cfg.server_info['mappings']
+                        print(self.k_dirmap)
+
+
     def OpenInput(self):
         """ Input按钮功能 """
         #QDesktopServices.openUrl(QUrl(self.k_inputPath))
@@ -244,7 +251,10 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
     def excuteMaya(self):
         """执行maya按钮"""
-        self.excuteBefore()
+        if self.k_one:
+            self.excuteBefore()
+            self.maya_dirmap()
+            self.k_one = False
 
         cmd_str = r"C:\Program Files\Autodesk\Maya%s\bin\maya.exe" % (self.getMayaVer)
         #cmd_str = r"D:\Autodesk\Maya2017\bin\maya.exe"
@@ -258,7 +268,10 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         CMDText = self.TextCMD.toPlainText()
         if CMDText:
             print ('excute %s' %CMDText)
-            self.excuteBefore()
+            if self.k_one:
+                self.excuteBefore()
+                self.maya_dirmap()
+                self.k_one = False
 
             CLASS_COMMON_UTIL.cmd(CMDText,continue_on_error=True, my_shell=True)
 
@@ -341,14 +354,16 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         keyplan7 = {'user': 'administrator', 'password': 'Ruiyun@2016'}
 
 
-        k_ipsort = {'w2': ['10.60.100.101','10.60.100.151'],\
-                    'w3': ['10.30.100.102', '10.30.100.102', '10.30.100.201', '10.30.100.202'], \
+        k_ipsort = {'w2': ['10.60.100.101','10.60.100.102','10.60.100.103','10.60.100.104','10.60.200.101', \
+                           '10.60.200.102','10.60.200.103','10.60.200.104','10.60.100.201','10.60.100.202', \
+                           '10.60.200.201','10.60.200.202'],\
+                    'w3': ['10.30.100.101','10.30.100.102', '10.30.100.102', '10.30.100.201', '10.30.100.202'], \
                     'w4': ['10.40.100.101', '10.40.100.102', '10.40.100.103', '10.40.100.201', '10.40.100.202'], \
                     'w9': ['10.80.100.101','10.80.100.102', '10.80.100.103', '10.80.100.104', '10.70.242.101', '10.70.242.102', \
                            '10.80.100.201', '10.80.100.202', '10.80.100.203','10.70.242.201'],\
-                    'gpu': ['10.90.100.101', '10.90.100.102', '10.90.100.103', '10.90.100.201', '10.90.100.202'] \
-                    'B_plugins':["10.60.100.151","10.60.200.150","10.60.200.151","10.60.100.152","10.80.243.50","10.80.243.51",\
-                                 "10.30.100.151","10.30.100.152","10.40.100.151","10.40.100.152","10.90.96.51"]\
+                    'gpu': ['10.90.100.101', '10.90.100.102', '10.90.100.103', '10.90.100.201', '10.90.100.202'],\
+                    'B_plugins':['10.60.100.151','10.60.200.150','10.60.200.151','10.60.100.152','10.80.243.50','10.80.243.51',\
+                                 '10.30.100.151','10.30.100.152','10.40.100.151','10.40.100.152','10.90.96.51']\
                     }
 
         self.k_cmdkey = {}
@@ -356,19 +371,19 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
         for ip_key in k_ipsort:
             if ip_key in ['w2']:
                 for ip_value in k_ipsort[ip_key]:
-                    k_cmdkey.update({ip_value: keyplan4})
+                    self.k_cmdkey.update({ip_value: keyplan4})
             if ip_key in ['gpu']:
                 for ip_value in k_ipsort[ip_key]:
-                    k_cmdkey.update({ip_value: keyplan1})
+                    self.k_cmdkey.update({ip_value: keyplan1})
             if ip_key in ['w3', 'w4']:
                 for ip_value in k_ipsort[ip_key]:
-                    k_cmdkey.update({ip_value: keyplan3})
+                    self.k_cmdkey.update({ip_value: keyplan3})
             if ip_key in ['w9']:
                 for ip_value in k_ipsort[ip_key]:
-                    k_cmdkey.update({ip_value: keyplan5})
+                    self.k_cmdkey.update({ip_value: keyplan5})
             if ip_key in ['B_plugins']:
                 for ip_value in k_ipsort[ip_key]:
-                    k_cmdkey.update({ip_value: keyplan6})
+                    self.k_cmdkey.update({ip_value: keyplan6})
 
         for k_ip in self.k_cmdkey:
             set_cmdkey = 'cmdkey /add:{0} /user:{1} /password:{2}'.format(k_ip,self.k_cmdkey[k_ip]['user'],self.k_cmdkey[k_ip]['password'])
@@ -376,11 +391,33 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
 
         print('添加全平台 地址凭据完毕!')
 
+    def maya_dirmap(self):
+        """在当前路径生成 usersetup.py文件"""
+        current_file = os.path.realpath(__file__)
+        current_path = os.path.dirname(current_file)
+        k_usersetup_mel = os.path.normpath(os.path.join(current_path,'userSetup.py'))
+        print(k_usersetup_mel)
+
+        if self.k_dirmap:
+            with open(k_usersetup_mel, "w") as f:
+                f.write("import maya.cmds as cmds\n")
+                f.write("cmds.dirmap( en=True )\n")
+                for i in self.k_dirmap:
+                    if not i.startswith("$"):
+                        old_path = i
+                        new_path = self.k_dirmap[i]
+                        f.write("cmds.dirmap ( m=('%s' , '%s'))\n" % (old_path,
+                                                                      new_path))
+                f.write("print('Mapping successfully')\n")
+
+            _MAYA_SCRIPT_PATH = os.environ.get('MAYA_SCRIPT_PATH')
+            os.environ['MAYA_SCRIPT_PATH'] = (_MAYA_SCRIPT_PATH + r";" if _MAYA_SCRIPT_PATH else "") + current_path
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
     kwin = k_Taskwindow()
-    MainWindow.setWindowTitle(u'环境配置工具 v1.2')
+    MainWindow.setWindowTitle(u'Maya 环境配置工具 v1.4')
 
     MainWindow.show()
     sys.exit(app.exec_())

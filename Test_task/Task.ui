@@ -406,6 +406,12 @@ font-family: &quot;Segoe UI&quot;;</string>
       </item>
       <item>
        <widget class="QLineEdit" name="TaskID_lineEdit">
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
@@ -429,6 +435,12 @@ font-family: &quot;Segoe UI&quot;;</string>
       </item>
       <item>
        <widget class="QLineEdit" name="UserID_lineEdit">
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
@@ -444,11 +456,24 @@ font-family: &quot;Segoe UI&quot;;</string>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>100</width>
+          <width>70</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="IPkey">
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>IP key</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="Get_Button">

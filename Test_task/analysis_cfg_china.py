@@ -9,6 +9,7 @@ class analysisCfg():
         self.userID = userID
 
         self.render_mode = ''
+        self.server_info = ''
 
         # delfix = re.findall('^\d?\D', taskID)
         # if delfix:
@@ -42,23 +43,26 @@ class analysisCfg():
         #\\10.60.100.101\p5\temp\10583609_render\cfg
 
         py_cfg_Path = os.path.join(self.platform_address[platform],'p5','temp','%s_render'%self.taskID,'cfg' )
-        print(py_cfg_Path)
+        print('client cfg path is %s' %py_cfg_Path)
+        ninputdata5_temp = os.path.join(self.platform_address[platform],'d','ninputdata5',self.taskID,'temp' )
+        print('client cfg path is %s' %ninputdata5_temp)
+
         web_cfg_Path = os.path.join(self.platform_address[platform],'p5','config',self.userID_up,self.userID,self.taskID)
-        print(web_cfg_Path)
+        print('web cfg path is %s' %web_cfg_Path)
         #py_cfg_Path = r'D:\Work\china_client\cfg'
         # py_cfg_Path = r'D:\Work\china_web\cfg'
         # web_cfg_Path = r'D:\Work\china_web\10583609'
 
         py_cfg_p      = os.path.join(py_cfg_Path,'py.cfg')
         #客户端配置文件路径
-        plugins_cfg_p = os.path.join(py_cfg_Path,'plugins.cfg')
-        server_cfg_p  = os.path.join(py_cfg_Path,'server.cfg')
-        render_cfg_p = os.path.join(py_cfg_Path, 'render.cfg')
+        plugins_cfg_p = os.path.join(ninputdata5_temp,'plugins.cfg')
+        server_cfg_p  = os.path.join(ninputdata5_temp,'server.cfg')
+        render_cfg_p = os.path.join(ninputdata5_temp, 'render.cfg')
         #网页端配置文件路径
         web_plugins_json_p = os.path.join(web_cfg_Path,'plugins.json')
         web_render_json_p = os.path.join(web_cfg_Path, 'render.json')
 
-        if os.path.exists(py_cfg_p) and os.path.exists(plugins_cfg_p) and os.path.exists(server_cfg_p):
+        if os.path.exists(py_cfg_p) and os.path.exists(plugins_cfg_p) and os.path.exists(server_cfg_p) and os.path.exists(render_cfg_p):
             #客户端
             self.render_mode = 'client'
             # 读取配置文件
@@ -115,7 +119,6 @@ class analysisCfg():
 
 
         self.function_path = os.path.join(self.platform_address[platform],'o5','py','model','function')
-
 
 
 
@@ -179,11 +182,11 @@ class analysisCfg():
 
         # B盘插件路径
         self.B_plugin_path = ''
-        if 'PLUGINPATH' in self.py_info:
-            self.B_plugin_path = os.path.normpath(eval(self.py_info['PLUGINPATH']))
-        elif 'PLUGINPATHLIST' in self.py_info:
+        if 'PLUGINPATHLIST' in self.py_info:
             B_plugin_paths = eval(self.py_info['PLUGINPATHLIST'])
             self.B_plugin_path = os.path.normpath(B_plugin_paths[0])
+        elif 'PLUGINPATH' in self.py_info:
+            self.B_plugin_path = os.path.normpath(eval(self.py_info['PLUGINPATH']))
         else:
             print('B plugins path error ----!!!!')
 
