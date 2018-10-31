@@ -137,6 +137,9 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                 self.B_path = Aspath[4]
                 print('Finish get Path analysis')
 
+                # dirmap的字典
+                self.k_dirmap = ''
+
                 if self.PlatformMode_CB.currentText() in ['Fox']:
                     #自定义function的路径 (mayaplugin路径,自定义py文件路径)
                     self.C_function_path = cfg.C_function_path
@@ -159,8 +162,7 @@ class k_Taskwindow(Task.Ui_MainWindow,QWidget):
                                                                      k_useID,'RayvisionCustomConfig.py'))
                     print('Finish get China customfile')
 
-                    #dirmap的字典
-                    self.k_dirmap = ''
+
                     if 'mappings' in cfg.server_info:
                         self.k_dirmap = cfg.server_info['mappings']
                         print(self.k_dirmap)
